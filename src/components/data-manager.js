@@ -2,26 +2,32 @@ import { LitElement, html, css } from 'lit';
 
 export class DataManager extends LitElement {
     static properties = {
-        pokemonData: { type: Object },
+        index: { type: Number }
     };
 
     constructor() {
         super();
-        this.pokemonData = {};
+        this.index = 1;
     }
 
-    updated(changedProperties) {
-        if (changedProperties.has("pokemonData")) {
-            this.handleDataUpdated(this.pokemonData);
-        }
+    handlePrevious() {
+        this.index--;
+
+        if (this.index < 1) this.index = 19;
+
+        this.requestPokemon();
     }
 
-    handleDataUpdated(data) {
-        if (data) {
-            this.dispatchEvent(new CustomEvent("set-pokemon-data", {
-                detail: data,
-            }));
-        }
+    handleNext() {
+        this.index++;
+
+        if (this.index > 19) this.index = 1;
+
+        this.requestPokemon();
+    }
+
+    requestPokemon() {
+        this.dispatchEvent(new CustomEvent('request-pokemon', { detail: this.index }));
     }
 }
 
