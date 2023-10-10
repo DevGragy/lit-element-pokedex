@@ -1,20 +1,7 @@
 import { LitElement, html } from "lit";
 
 export class DataProvider extends LitElement {
-    static properties = {
-        pokemonIndex: { type: Number },
-    };
-
-    constructor() {
-        super();
-        this.pokemonIndex = 1;
-    }
-
-    updated(changedProperties) {
-        if (changedProperties.has("pokemonIndex")) {
-            this.getData(this.pokemonIndex);
-        }
-    }
+    static properties = {};
 
     async getData(pokemonIndex) {
         try {
