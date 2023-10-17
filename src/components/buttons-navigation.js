@@ -1,14 +1,7 @@
 import { LitElement, html, css } from "lit";
 
 export class ButtonsNavigation extends LitElement {
-    static properties = {
-        currentIndex: { type: Number },
-    };
-
-    constructor() {
-        super();
-        this.currentIndex = 1;
-    }
+    static properties = {};
 
     static styles = css`
         div {
@@ -62,13 +55,6 @@ export class ButtonsNavigation extends LitElement {
     `;
 
     _onPreviousClick() {
-        this.currentIndex--;
-
-        //Si es menor al primero (1) regresa al ultimo elemento (20)
-        if (this.currentIndex < 1) {
-            this.currentIndex = 20;
-        }
-
         this.dispatchEvent(
             new CustomEvent("on-previus-click", {
                 detail: this.currentIndex,
@@ -77,13 +63,6 @@ export class ButtonsNavigation extends LitElement {
     }
 
     _onNextClick() {
-        this.currentIndex++;
-
-        //Si el indice llega al ultimo elemento (20) regresa al primero (1)
-        if (this.currentIndex > 20) {
-            this.currentIndex = 1;
-        }
-
         this.dispatchEvent(
             new CustomEvent("on-next-click", {
                 detail: this.currentIndex,

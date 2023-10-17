@@ -6,16 +6,7 @@ import "./components/data-provider";
 import Pokeball from "./images/pokebola.png";
 
 export class MyRoot extends LitElement {
-    static properties = {
-        pokeIndex: { type: Number },
-        pokemonData: { type: Object },
-    };
-
-    constructor() {
-        super();
-        this.pokeIndex = 1;
-        this.pokemonData = {};
-    }
+    static properties = {};
 
     static styles = [
         css`
@@ -42,26 +33,25 @@ export class MyRoot extends LitElement {
         `,
     ];
 
-    _onPreviousClick(event) {
-        const currentIndex = event.detail;
-        this.pokeIndex = currentIndex;
+    firstUpdated() {
+        super.firstUpdated();
+        this.loadPokemon({ detail: 1 });
     }
 
-    _onNextClick(event) {
-        const currentIndex = event.detail;
-        this.pokeIndex = currentIndex;
+    _onPreviousClick() {
+        this.shadowRoot.querySelector('data-manager').handlePrevious();
+    }
+
+    _onNextClick() {
+        this.shadowRoot.querySelector('data-manager').handleNext();
+    }
+
+    loadPokemon(event) {
+        this.shadowRoot.querySelector('data-provider').getData(event.detail);
     }
 
     handlePokemonRequest(event) {
-        const pokemonResquest = event.detail;
-        this.pokemonData = pokemonResquest;
-    }
-
-    handlePokemonData(event) {
-        const pokemonData = event.detail;
-        this.pokemonData = pokemonData;
-
-        console.log(this.pokemonData);
+        this.shadowRoot.querySelector('pokemon-card').pokemonData = event.detail
     }
 
     render() {
@@ -70,14 +60,12 @@ export class MyRoot extends LitElement {
                 Pokedex <img src="${Pokeball}" class="pokeball" />
             </h1>
             <data-provider
-                .pokemonIndex="${this.pokeIndex}"
                 @get-pokemon-data="${this.handlePokemonRequest}"
             ></data-provider>
             <data-manager
-                .pokemonData="${this.pokemonData}"
-                @set-pokemon-data="${this.handlePokemonData}"
+                @request-pokemon="${this.loadPokemon}"
             ></data-manager>
-            <pokemon-card .pokemonData="${this.pokemonData}"> </pokemon-card>
+            <pokemon-card> </pokemon-card>
             <buttons-navigation
                 @on-previus-click="${this._onPreviousClick}"
                 @on-next-click="${this._onNextClick}"
